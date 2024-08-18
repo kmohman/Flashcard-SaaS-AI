@@ -89,9 +89,9 @@ export default function Flashcards() {
     if (flashcards.length === 0) {
         return (
             <Container maxWidth="md" sx={{ mt: 4 }}>
-                <Typography variant="h6" align="center">
-                    You don't have any flashcard collections yet. Start by creating one!
-                </Typography>
+               <Typography variant="h6" align="center">
+    You don&apos;t have any flashcard collections yet. Start by creating one!
+</Typography>
             </Container>
         );
     }
