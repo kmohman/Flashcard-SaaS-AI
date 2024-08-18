@@ -113,7 +113,7 @@ export default function Generate() {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [text]);
+    }, [text, handleSubmit]);
 
     return (
         <Container
