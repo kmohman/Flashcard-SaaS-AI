@@ -152,23 +152,20 @@ export default function Home() {
         <meta name="description" content="Create flashcards from your text" />
       </Head>
 
-      <video
-        autoPlay
-        loop
-        muted
-        style={{
+      {/* Background Image instead of Video */}
+      <Box
+        sx={{
           position: 'absolute',
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
           top: 0,
           left: 0,
           zIndex: -1,
+          backgroundImage: 'url(/background.avif)',  // Ensure you have placed the background.avif in the public directory
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
-      >
-        <source src="/video1.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      />
 
       <AppBar position="static" sx={{ background: 'rgba(0, 0, 0, 0.7)' }}>
         <Toolbar>
