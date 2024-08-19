@@ -161,7 +161,7 @@ export default function Home() {
           top: 0,
           left: 0,
           zIndex: -1,
-          backgroundImage: 'url(/background.avif)',  // Ensure you have placed the background.avif in the public directory
+          backgroundImage: 'url(/background.jpeg)',  // Ensure you have placed the background.avif in the public directory
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
