@@ -6,7 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
 import { writeBatch, doc, collection, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { db } from '@/firebase';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
@@ -20,7 +20,7 @@ export default function Generate() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const handleSubmit = async () => {
+    const handleSubmit = useCallback(async () => {
         setLoading(true);
         try {
             const subscriptionType = user?.publicMetadata?.subscriptionType || 'Free';
@@ -50,7 +50,7 @@ export default function Generate() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [text, user]);
 
     const handleCardClick = (id) => {
         setFlipped((prev) => ({
