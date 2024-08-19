@@ -22,24 +22,32 @@ export default function Home() {
   const [subscriptionType, setSubscriptionType] = useState('Free');
 
   useEffect(() => {
+    console.log('isLoaded:', isLoaded);
+    console.log('user:', user);
     if (isLoaded && user) {
+      console.log('User data loaded:', user);
       setSubscriptionType(user.publicMetadata?.subscriptionType || 'Free');
       setLoading(false);
+    } else {
+      console.log('User data not loaded or user not signed in.');
     }
   }, [isLoaded, user]);
+  
 
   useEffect(() => {
+    console.log('Checking session status...');
     const checkSession = async () => {
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get('session_id');
-
+  
       if (sessionId && isSignedIn) {
         try {
+          console.log('Session ID found:', sessionId);
           const response = await fetch(`/api/checkout_session?session_id=${sessionId}`);
           const sessionData = await response.json();
-
+  
           if (sessionData && sessionData.payment_status === 'paid') {
-            // Update user's subscription to Pro or Basic based on the payment
+            console.log('Payment successful, updating subscription...');
             await fetch('/api/update_subscription', {
               method: 'POST',
               headers: {
@@ -47,14 +55,15 @@ export default function Home() {
               },
               body: JSON.stringify({ userId: user.id, subscriptionType: 'Pro' }),
             });
-
+  
             // Re-authenticate to refresh user data
             await reauthenticate();
             setSubscriptionType('Pro');
-
+  
             // Redirect to the main page
             router.push('/');
           } else {
+            console.log('Payment failed, redirecting...');
             router.push('/payment-failed');
           }
         } catch (error) {
@@ -64,14 +73,16 @@ export default function Home() {
           setLoading(false);
         }
       } else {
+        console.log('No session ID found or user not signed in.');
         setLoading(false);
       }
     };
-
+  
     if (isSignedIn) {
       checkSession();
     }
   }, [isSignedIn, router, user, reauthenticate]);
+  
 
   const handleGetStarted = () => {
     router.push('/sign-in');
