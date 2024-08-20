@@ -1,5 +1,4 @@
-'use client';
-
+'use client'
 import { Container, Typography, Box, AppBar, Toolbar, Button, IconButton, Grid } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
@@ -32,18 +31,23 @@ export default function Home() {
       setLoading(false);
     }
   }, [isLoaded, isSignedIn, user]);
+  
+  
 
   useEffect(() => {
+    console.log('Checking session status...');
     const checkSession = async () => {
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get('session_id');
-
+  
       if (sessionId && isSignedIn) {
         try {
+          console.log('Session ID found:', sessionId);
           const response = await fetch(`/api/checkout_session?session_id=${sessionId}`);
           const sessionData = await response.json();
-
+  
           if (sessionData && sessionData.payment_status === 'paid') {
+            console.log('Payment successful, updating subscription...');
             await fetch('/api/update_subscription', {
               method: 'POST',
               headers: {
@@ -51,11 +55,15 @@ export default function Home() {
               },
               body: JSON.stringify({ userId: user.id, subscriptionType: 'Pro' }),
             });
-
+  
+            // Re-authenticate to refresh user data
             await reauthenticate();
             setSubscriptionType('Pro');
+  
+            // Redirect to the main page
             router.push('/');
           } else {
+            console.log('Payment failed, redirecting...');
             router.push('/payment-failed');
           }
         } catch (error) {
@@ -65,14 +73,16 @@ export default function Home() {
           setLoading(false);
         }
       } else {
+        console.log('No session ID found or user not signed in.');
         setLoading(false);
       }
     };
-
+  
     if (isSignedIn) {
       checkSession();
     }
   }, [isSignedIn, router, user, reauthenticate]);
+  
 
   const handleGetStarted = () => {
     router.push('/sign-in');
@@ -153,24 +163,20 @@ export default function Home() {
         <meta name="description" content="Create flashcards from your text" />
       </Head>
 
-      {/* Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        style={{
+      {/* Background Image instead of Video */}
+      <Box
+        sx={{
           position: 'absolute',
           width: '100%',
           height: '100%',
           top: 0,
           left: 0,
-          objectFit: 'cover',
           zIndex: -1,
+          backgroundImage: 'url(/background.jpeg)',  // Ensure you have placed the background.avif in the public directory
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
-      >
-        <source src="/video.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      />
 
       <AppBar position="static" sx={{ background: 'rgba(0, 0, 0, 0.7)' }}>
         <Toolbar>
@@ -357,7 +363,7 @@ export default function Home() {
             </IconButton>
             <IconButton
               component="a"
-              href="https://www.linkedin.com/in/khalilullah-mohman-045161244/"
+              href="https://linkedin.com/in/your-linkedin-profile"
               target="_blank"
               rel="noopener noreferrer"
               sx={{ color: '#333', ml: 1 }}

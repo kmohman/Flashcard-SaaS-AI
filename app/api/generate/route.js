@@ -41,7 +41,7 @@ export async function POST(req) {
         const data = await req.text();
 
         const subscriptionType = 'Free'; // Assume 'Free' for now
-        const flashcardLimit = subscriptionType === 'Pro' ? 50 : 8; // Free users can only see up to 3 flashcards
+        const flashcardLimit = subscriptionType === 'Pro' ? 50 : 7; // Free users can only see up to 3 flashcards
 
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_API_KEY,
