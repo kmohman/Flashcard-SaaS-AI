@@ -22,16 +22,16 @@ export default function Home() {
   const [subscriptionType, setSubscriptionType] = useState('Free');
 
   useEffect(() => {
-    console.log('isLoaded:', isLoaded);
-    console.log('user:', user);
-    if (isLoaded && user) {
-      console.log('User data loaded:', user);
-      setSubscriptionType(user.publicMetadata?.subscriptionType || 'Free');
+    if (isLoaded) {
+      if (isSignedIn && user) {
+        setSubscriptionType(user.publicMetadata?.subscriptionType || 'Free');
+      } else {
+        setSubscriptionType('Free');
+      }
       setLoading(false);
-    } else {
-      console.log('User data not loaded or user not signed in.');
     }
-  }, [isLoaded, user]);
+  }, [isLoaded, isSignedIn, user]);
+  
   
 
   useEffect(() => {
